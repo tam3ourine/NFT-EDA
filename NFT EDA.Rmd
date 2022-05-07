@@ -9,16 +9,34 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
+Import libraries
 ```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
 
 ```
 
+Load dataset
 ```{r}
+
+punk1 <- read.csv('punk_attribute_data/0-999.csv')
+punk2 <- read.csv('punk_attribute_data/1000-1999.csv')
+punk3 <- read.csv('punk_attribute_data/2000-2999.csv')
+punk4 <- read.csv('punk_attribute_data/3000-3999.csv')
+punk5 <- read.csv('punk_attribute_data/4000-4999.csv')
+punk6 <- read.csv('punk_attribute_data/5000-5999.csv')
+punk7 <- read.csv('punk_attribute_data/6000-6999.csv')
+punk8 <- read.csv('punk_attribute_data/7000-7999.csv')
+punk9 <- read.csv('punk_attribute_data/8000-8999.csv')
+punk10 <- read.csv('punk_attribute_data/9000-9999.csv')
+
 ```
 
-
+Combine dataframe into one
 ```{r}
+AllPunk <- rbind(punk1, punk2, punk3, punk4, punk5, punk6, punk7, punk8, punk9, punk10)
+
 ```
 
 
