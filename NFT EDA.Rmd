@@ -31,76 +31,64 @@ punk8 <- read.csv('punk_attribute_data/7000-7999.csv')
 punk9 <- read.csv('punk_attribute_data/8000-8999.csv')
 punk10 <- read.csv('punk_attribute_data/9000-9999.csv')
 
-attr <- read.csv('punk_attribute_data/CryptoPunks Attributes - Accessories Type.csv')
+```
+
+Combine dataframes into one
+```{r}
+AllPunk <- rbind(punk1, punk2, punk3, punk4, punk5, punk6, punk7, punk8, punk9, punk10)
 
 ```
 
-Combine dataframe into one
+Create df with attributes and load data
 ```{r}
-AllPunk <- rbind(punk1, punk2, punk3, punk4, punk5, punk6, punk7, punk8, punk9, punk10)
+attr <- read.csv('punk_attribute_data/CryptoPunks Attributes - Accessories Type.csv', header=T, na.strings=c("","NA"))
 
 ```
 
 
 ```{r}
 class(AllPunk$accessories)
-
 ```
-
-
 ```{r}
-x <- "Green Eye Shadow / Earring / Blonde Bob"
-x_split <- strsplit(x, "/")
-x_split
-class(x_split[[1]])
-
-y <- " Earring "
-
-str_trim(y)
-
-
 punktest <- AllPunk[1:10, ]
-punktest$accessories <- sapply(punktest$accessories, strsplit(punktest$accessories, "/"))
+```
+
+
+Write function for finding attribute from string
+```{r}
+
+attr_func <- function(attr.col, target.string) {
+  for (a in attr.col) {
+    if (is.na(a) == FALSE) {
+      if (grepl(a, target.string) == TRUE) {
+        return(a)
+      }
+    }
+}
+}
+
+
+attr_test <- attr_func(attr$Hair, punktest$accessories[1])
 
 ```
 
 
 ```{r}
-a_m1 <- apply(m1, 2, sum)
 
+paste(target, "test")
+test_func <- function(i) {
+  return(paste(i, "test"))
+}
 
-z<-data.frame(nam1=c("bbb / aba "," ccc / abb "," ddd / abc ","eee / abd "),stringsAsFactors=FALSE)
+test_func(punktest$accessories[1])
 
-z$nam5 <- strsplit(z$nam1,split="/")
+sapply(col, func)
 
-y <- unlist(z$nam5)
-z$nam6[1] <- c(str_trim(y))
-
-
-
-```
-
-
-```{r}
-y<-data.frame(nam1=c("aaa..aba","bbb..abb","ccc..abc","ddd..abd", "ddd..abd..abc"),
-stringsAsFactors=FALSE)
-library(stringr)
-
-y$nam2<-as.data.frame(str_split_fixed(y$nam1, "\\..", 2))[[1]]
-y$nam3<-as.data.frame(str_split_fixed(y$nam1, "\\..", 2))[[2]]
-y$nam4<-as.data.frame(str_split_fixed(y$nam1, "\\..", 2))[[3]]
-
-test <- c("bbb ", " aba ")
-str_trim(test)
-z$nam4[1]
-z$nam4[1] <- unlist(z$nam4[1])
-length(z$nam4[[1]])
-z$nam4[[2]]
+punktest$test4 <- sapply(punktest$accessories, test_func)
+punktest$test4 <- sapply(punktest$accessories, attr_func(attr$Hair))
 
 
 
-
-z$nam4 <- str_trim(z$nam2)
 ```
 
 
