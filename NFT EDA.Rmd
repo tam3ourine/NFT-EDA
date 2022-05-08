@@ -85,14 +85,25 @@ test_func(punktest$accessories[1])
 sapply(col, func)
 
 punktest$test4 <- sapply(punktest$accessories, test_func)
-punktest$test4 <- sapply(punktest$accessories, attr_func(attr$Hair))
-
-
+punktest$Hair <- sapply(punktest$accessories, attrHair_func)
 
 ```
 
 
 ```{r}
+
+attrHair_func <- function(target.string) {
+  for (a in attr$Hair) {
+    if (is.na(a) == FALSE) {
+      if (grepl(a, target.string) == TRUE) {
+        return(a)
+      }
+    }
+}
+}
+
+
+attrHair_func(punktest$accessories[1])
 ```
 
 
