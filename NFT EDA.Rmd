@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 Import libraries
 ```{r}
 library(tidyverse)
@@ -16,6 +17,7 @@ library(dplyr)
 library(ggplot2)
 
 ```
+
 
 Load dataset
 ```{r}
@@ -33,11 +35,13 @@ punk10 <- read.csv('punk_attribute_data/9000-9999.csv')
 
 ```
 
+
 Combine dataframes into one
 ```{r}
 AllPunk <- rbind(punk1, punk2, punk3, punk4, punk5, punk6, punk7, punk8, punk9, punk10)
 
 ```
+
 
 Create df with attributes and load data
 ```{r}
@@ -49,6 +53,8 @@ attr <- read.csv('punk_attribute_data/CryptoPunks Attributes - Accessories Type.
 ```{r}
 class(AllPunk$accessories)
 ```
+
+Create smaller df to test
 ```{r}
 punktest <- AllPunk[1:10, ]
 ```
@@ -73,26 +79,18 @@ attr_test <- attr_func(attr$Hair, punktest$accessories[1])
 ```
 
 
+Get colnames
 ```{r}
-
-paste(target, "test")
-test_func <- function(i) {
-  return(paste(i, "test"))
-}
-
-test_func(punktest$accessories[1])
-
-sapply(col, func)
-
-punktest$test4 <- sapply(punktest$accessories, test_func)
-punktest$Hair <- sapply(punktest$accessories, attrHair_func)
-
+attr_names <- colnames(attr)
+attr_names
 ```
 
 
+Cater function to use with sapply - to apply to column
+Create function to get Hair accessories
 ```{r}
 
-attrHair_func <- function(target.string) {
+Hair_func <- function(target.string) {
   for (a in attr$Hair) {
     if (is.na(a) == FALSE) {
       if (grepl(a, target.string) == TRUE) {
@@ -103,12 +101,182 @@ attrHair_func <- function(target.string) {
 }
 
 
-attrHair_func(punktest$accessories[1])
+punktest$Hair <- sapply(punktest$accessories, Hair_func)
+```
+
+
+Create function to get Eyes accessories
+```{r}
+Eyes_func <- function(target.string) {
+  for (a in attr$Eyes) {
+    if (is.na(a) == FALSE) {
+      if (grepl(a, target.string) == TRUE) {
+        return(a)
+      }
+    }
+}
+}
+
+
+punktest$Eyes <- sapply(punktest$accessories, Eyes_func)
+```
+
+
+Create function to get Facial.Hair accessories
+```{r}
+Facial.Hair_func <- function(target.string) {
+  for (a in attr$Facial.Hair) {
+    if (is.na(a) == FALSE) {
+      if (grepl(a, target.string) == TRUE) {
+        return(a)
+      }
+    }
+}
+}
+
+
+punktest$Facial.Hair <- sapply(punktest$accessories, Facial.Hair_func)
+```
+
+Create function to get Mouth.Prop accessories
+```{r}
+Mouth.Prop_func <- function(target.string) {
+  for (a in attr$Mouth.Prop) {
+    if (is.na(a) == FALSE) {
+      if (grepl(a, target.string) == TRUE) {
+        return(a)
+      }
+    }
+}
+}
+
+
+punktest$Mouth.Prop <- sapply(punktest$accessories, Mouth.Prop_func)
+```
+
+
+Create function to get Lips accessories
+```{r}
+Lips_func <- function(target.string) {
+  for (a in attr$Lips) {
+    if (is.na(a) == FALSE) {
+      if (grepl(a, target.string) == TRUE) {
+        return(a)
+      }
+    }
+}
+}
+
+
+punktest$Lips <- sapply(punktest$accessories, Lips_func)
+```
+
+
+Create function to get Neck accessories
+```{r}
+Neck_func <- function(target.string) {
+  for (a in attr$Neck) {
+    if (is.na(a) == FALSE) {
+      if (grepl(a, target.string) == TRUE) {
+        return(a)
+      }
+    }
+}
+}
+
+
+punktest$Neck <- sapply(punktest$accessories, Neck_func)
+```
+
+
+Create function to get Cheeks accessories
+```{r}
+Cheeks_func <- function(target.string) {
+  for (a in attr$Cheeks) {
+    if (is.na(a) == FALSE) {
+      if (grepl(a, target.string) == TRUE) {
+        return(a)
+      }
+    }
+}
+}
+
+
+punktest$Cheeks <- sapply(punktest$accessories, Cheeks_func)
+```
+
+
+Create function to get Teeth accessories
+```{r}
+Teeth_func <- function(target.string) {
+  for (a in attr$Teeth) {
+    if (is.na(a) == FALSE) {
+      if (grepl(a, target.string) == TRUE) {
+        return(a)
+      }
+    }
+}
+}
+
+
+punktest$Teeth <- sapply(punktest$accessories, Teeth_func)
+```
+
+
+Create function to get Nose accessories
+```{r}
+Nose_func <- function(target.string) {
+  for (a in attr$Nose) {
+    if (is.na(a) == FALSE) {
+      if (grepl(a, target.string) == TRUE) {
+        return(a)
+      }
+    }
+}
+}
+
+
+punktest$Nose <- sapply(punktest$accessories, Nose_func)
+```
+
+
+Create function to get Ears accessories
+```{r}
+Ears_func <- function(target.string) {
+  for (a in attr$Ears) {
+    if (is.na(a) == FALSE) {
+      if (grepl(a, target.string) == TRUE) {
+        return(a)
+      }
+    }
+}
+}
+
+
+punktest$Ears <- sapply(punktest$accessories, Ears_func)
+```
+
+
+Change to NULL values to NA
+```{r}
+punktest[punktest == "NULL"] <- NA
 ```
 
 
 
+```{r}
+ggplot(punktest,aes(Eyes))+geom_bar()
 
+
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
 
 
 
