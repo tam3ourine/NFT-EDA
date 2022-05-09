@@ -260,26 +260,97 @@ punktest$Ears <- sapply(punktest$accessories, Ears_func)
 Change to NULL values to NA
 ```{r}
 punktest[punktest == "NULL"] <- NA
+
+summary(punktest)
+
+sum(is.na(punktest))
+
+str(punktest)
 ```
 
 
 
 ```{r}
-ggplot(punktest,aes(Eyes))+geom_bar()
+g <- ggplot(punktest, aes(Hair))
+g + geom_bar(na.rm = TRUE)
+```
+
+
+```{r}
+g <- ggplot(punktest, aes(Eyes))
+g + geom_bar(na.rm = FALSE)
+
+
+punktest$Eyes[] <- lapply(punktest$Eyes, as.character)
+str(punktest)
+
+
+is.list(punktest$Eyes)
+
+
+
+ggplot(data=punktest, aes(x=Eyes)) + 
+geom_bar()
+
+ggplot(data=subset(iris, !is.na(Sepal.Length)), aes(x=Sepal.Length)) + 
+geom_bar(stat="bin")
+
+```
+```{r}
+
+```
+
+
+
+
+
+
+```{r}
+
+data("iris")
+iris$Sepal.Length[5:10] <- NA # create some NAs for this example
+
+
+
+
+ggplot(data=iris, aes(x=Sepal.Length)) + 
+geom_bar()
+
+ggplot(data=subset(iris, !is.na(Sepal.Length)), aes(x=Sepal.Length)) + 
+geom_bar()
+```
+
+
+```{r}
+neighborhood <- c("Neighborhood A", 
+                  "Neighborhood B", 
+                  "Neighborhood C",
+                  "Neighborhood A",
+                  "Neighborhood B",
+                  NA, # missing data
+                  "Neighborhood B",
+                  NA) # missing data
+
+mydata <- data.frame(neighborhood)
 
 
 ```
 
 
 ```{r}
+ggplot(mydata,
+       aes(x = neighborhood, # x is neighborhood
+           fill = neighborhood)) + # fill is neighborhood
+  geom_bar()
+
+class(mydata$neighborhood)
+class(punktest$Eyes)
+
+ggplot(punktest,
+       aes(x = Eyes, # x is neighborhood
+           fill = Eyes)) + # fill is neighborhood
+  geom_bar()
 ```
-
-
-```{r}
-```
-
-
-
 
 
 
