@@ -1,5 +1,5 @@
 ---
-title: "NFT EDA"
+title: "CryptoPunks EDA"
 author: "Tam Trinh"
 date: '2022-05-06'
 output: html_document
@@ -10,11 +10,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
+# Load Dataset and Setup
+
 Import libraries
 ```{r}
-library(tidyverse)
 library(dplyr)
 library(ggplot2)
+library(RColorBrewer)
+
 
 ```
 
@@ -43,27 +46,24 @@ AllPunk <- rbind(punk1, punk2, punk3, punk4, punk5, punk6, punk7, punk8, punk9, 
 ```
 
 
-Create df with attributes and load data
+Create df with CryptoPunk attributes and load data
 ```{r}
 attr <- read.csv('punk_attribute_data/CryptoPunks Attributes - Accessories Type.csv', header=T, na.strings=c("","NA"))
 
 ```
 
 
-Create smaller df to test
+# Wrangle Data
+
+Slice smaller df to test
 ```{r}
 punktest <- AllPunk[1:10, ]
 ```
 
 
-
-```{r}
-punktest$accessories[10] <- "Frown / VR"
-```
-
-
 Write function for finding attribute from string
 ```{r}
+# The attributes of the CryptoPunks are listed in a string under "accessories" - I'd like to pull them out and put them under columns by accessory group
 
 attr_func <- function(attr.col, target.string) {
   for (a in attr.col) {
@@ -88,41 +88,9 @@ attr_names
 ```
 
 
-```{r}
-
-df <- data.frame("c1" = c(41, 42, 43, 44),
-                 "c2" = c(45, 46, 47, 48),
-                 "c3" = c(49, 50, 51, 52))
-
-df[nrow(df) + 1,] <- c(10, 20, 30)
-
-attr[nrow(attr) + 1] <- c(NA, test, NA, NA, NA, NA, NA, NA, NA, NA)
-
-
-str(punktest)
-
-
-punktest$Hair[punktest$Hair == 'NULL'] <- NA
-```
-
-
-
-Cater function to use with sapply - to apply to column
 Create function to get Hair accessories
 ```{r}
-
-Hair_func <- function(target.string) {
-  for (a in attr$Hair) {
-    if (is.na(a) == FALSE) {
-      if (grepl(a, target.string) == TRUE) {
-        return(a)
-      }
-    } else {
-      return(NA)
-    }
-  }
-}
-
+# Create function that can pull out individual attributes and be used to apply to whole columns 
 
 
 Hair_func <- function(target.string) {
@@ -136,25 +104,11 @@ Hair_func <- function(target.string) {
     }
   }
 }
-
-Hair_func <- function(target.string) {
-  for (a in attr$Hair) {
-    if (is.na(a) == FALSE) {
-      if (grepl(a, target.string) == TRUE) {
-        return(a)
-      } 
-    } else {
-      return(NA)
-    }
-  }
-}
-
-
-
 
 
 
 punktest$Hair <- sapply(punktest$accessories, Hair_func)
+# test on small df punktest
 ```
 
 
@@ -351,9 +305,12 @@ summary(punktest)
 sum(is.na(punktest))
 
 str(punktest)
+
+# the functions seem to work and the attrributes are added as columns in punktest df
 ```
 
 
+Inspect AllPunk df
 ```{r}
 summary(AllPunk)
 
@@ -368,67 +325,182 @@ str(AllPunk)
 colnames(attr)
 ```
 
+Get Hair accessories from the AllPunk df
+```{r}
+AllPunk$Hair <- sapply(AllPunk$accessories, Hair_func)
+```
+
 
 ```{r}
+# I noticed "NULL" values in the Hair column after sapplying the function,
+# which didn't have a chance to happen in the test df, so I converted the NULL values to NA, and then changed the column from list back to char
+
+# test on punktest first
+punktest$accessories[10] <- "Frown / VR"
+#str(punktest)
+punktest$Hair[punktest$Hair == 'NULL'] <- NA
+punktest$Hair <- unlist(punktest$Hair)
+
+#apply to AllPunk
+#str(AllPunk)
+AllPunk$Hair[AllPunk$Hair == 'NULL'] <- NA
+AllPunk$Hair <- unlist(AllPunk$Hair)
+
+str(AllPunk) # worked! NULLS changed to NA and unlisted
+```
+
+
+Sapply the rest of the accessories functions to AllPunk df
+```{r}
+
 AllPunk$Eyes <- sapply(AllPunk$accessories, Eyes_func)
+AllPunk$Facial.Hair <- sapply(AllPunk$accessories, Facial.Hair_func)
+AllPunk$Mouth.Prop <- sapply(AllPunk$accessories, Mouth.Prop_func)
+AllPunk$Lips <- sapply(AllPunk$accessories, Lips_func)
+
+AllPunk$Neck <- sapply(AllPunk$accessories, Neck_func)
+AllPunk$Cheeks <- sapply(AllPunk$accessories, Cheeks_func)
+AllPunk$Teeth <- sapply(AllPunk$accessories, Teeth_func)
+AllPunk$Nose <- sapply(AllPunk$accessories, Nose_func)
+AllPunk$Ears <- sapply(AllPunk$accessories, Ears_func)
 
 
 ```
 
 
-```{r}
-```
+# Visualize Each Attribute
 
 
-```{r}
-```
-
-
-
-
-
-
-
-
-
-
-```{r}
-g <- ggplot(punktest, aes(Hair))
-g + geom_bar(na.rm = TRUE)
-```
-
-
+Create Barplot for Hair Attribute
 ```{r}
 
-ggplot(data=punktest, aes(x=Eyes)) + 
-geom_bar()
+ggplot(data=AllPunk, aes(x=Hair)) + 
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
-ggplot(data=subset(punktest, !is.na(Eyes)), aes(x=Eyes, fill=Eyes)) + 
-geom_bar()
-
-
-
+ggplot(data=subset(AllPunk, !is.na(Hair)), aes(x=reorder(Hair, Hair, function(x)-length(x)))) + 
+  geom_bar(aes(fill=Hair), show.legend = FALSE) +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = .5, hjust=1),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Hair Attributes", y = "Count", x = "Hair Attributes")
 
 
 ```
+
+Create barplot for Eyes Attribute
 ```{r}
 
+ggplot(data=subset(AllPunk, !is.na(Eyes)), aes(x=reorder(Eyes, Eyes, function(x)-length(x)))) + 
+  geom_bar(aes(fill=Eyes), show.legend = FALSE) +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = .5, hjust=1),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Eyes Attributes", y = "Count", x = "Eyes Attributes")
+
 ```
 
 
-
-
-
-
+Create barplot for Facial.Hair Attribute
 ```{r}
+
+ggplot(data=subset(AllPunk, !is.na(Facial.Hair)), aes(x=reorder(Facial.Hair, Facial.Hair, function(x)-length(x)))) + 
+  geom_bar(aes(fill=Facial.Hair), show.legend = FALSE) +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = .5, hjust=1),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Facial Hair Attributes", y = "Count", x = "Facial Hair Attributes")
+
 ```
 
 
+Create barplot for Mouth.Prop Attribute
+```{r}
+
+ggplot(data=subset(AllPunk, !is.na(Mouth.Prop)), aes(x=reorder(Mouth.Prop, Mouth.Prop, function(x)-length(x)))) + 
+  geom_bar(aes(fill=Mouth.Prop), show.legend = FALSE) +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 0, vjust = .5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Mouth Prop Attributes", y = "Count", x = "Mouth Prop Attributes")
+
+```
 
 
+Create barplot for Lips Attribute
+```{r}
+
+ggplot(data=subset(AllPunk, !is.na(Lips)), aes(x=reorder(Lips, Lips, function(x)-length(x)))) + 
+  geom_bar(aes(fill=Lips), show.legend = FALSE) +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 0, vjust = .5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) +
+  labs(title = "Count of Lips Attributes", y = "Count", x = "Lips Attributes")
+
+```
 
 
+Create barplot for Neck Attribute
+```{r}
+
+ggplot(data=subset(AllPunk, !is.na(Neck)), aes(x=reorder(Neck, Neck, function(x)-length(x)))) + 
+  geom_bar(aes(fill=Neck), show.legend = FALSE)  +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 0, vjust = .5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Neck Attributes", y = "Count", x = "Neck Attributes")
+
+```
 
 
+Create barplot for Cheeks Attribute
+```{r}
+
+ggplot(data=subset(AllPunk, !is.na(Cheeks)), aes(x=reorder(Cheeks, Cheeks, function(x)-length(x)))) + 
+  geom_bar(aes(fill=Cheeks), show.legend = FALSE) +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 0, vjust = .5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Cheeks Attributes", y = "Count", x = "Cheeks Attributes")
+
+```
+
+
+Create barplot for Teeth Attribute
+```{r}
+
+ggplot(data=subset(AllPunk, !is.na(Teeth)), aes(x=reorder(Teeth, Teeth, function(x)-length(x)))) + 
+  geom_bar(aes(fill=Teeth), show.legend = FALSE) +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 0, vjust = .5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Teeth Attributes", y = "Count", x = "Teeth Attributes") +
+  scale_fill_brewer(palette = "Dark2")
+
+```
+
+
+Create barplot for Nose Attribute
+```{r}
+
+ggplot(data=subset(AllPunk, !is.na(Nose)), aes(x=reorder(Nose, Nose, function(x)-length(x)))) + 
+  geom_bar(aes(fill=Nose), show.legend = FALSE) + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust=.5)) + 
+  labs(title = "Count of Nose Attributes", y = "Count", x = "Nose Attributes") + scale_fill_brewer(palette = "Pastel1")
+
+```
+
+
+Create barplot for Ears Attribute
+```{r}
+
+ggplot(data=subset(AllPunk, !is.na(Ears)), aes(x=reorder(Ears, Ears, function(x)-length(x)))) + 
+  geom_bar(aes(fill=Ears), show.legend = FALSE) + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust=.5)) + 
+  labs(title = "Count of Ears Attributes", y = "Count", x = "Ears Attributes") + scale_fill_brewer(palette = "PiYG")
+
+```
 
 
