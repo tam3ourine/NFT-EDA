@@ -477,6 +477,13 @@ ggplot(data=subset(AllPunk, !is.na(Teeth)), aes(x=reorder(Teeth, Teeth, function
   labs(title = "Count of Teeth Attributes", y = "Count", x = "Teeth Attributes") +
   scale_fill_brewer(palette = "Dark2")
 
+
+ggplot(data=AllPunk, aes(x=Teeth)) + 
+  geom_bar(aes(color=Teeth), show.legend = FALSE) +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 0, vjust = .5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Teeth Attributes", y = "Count", x = "Teeth Attributes") 
 ```
 
 
@@ -486,9 +493,17 @@ Create barplot for Nose Attribute
 ggplot(data=subset(AllPunk, !is.na(Nose)), aes(x=reorder(Nose, Nose, function(x)-length(x)))) + 
   geom_bar(aes(fill=Nose), show.legend = FALSE) + 
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust=.5)) + 
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
   labs(title = "Count of Nose Attributes", y = "Count", x = "Nose Attributes") + scale_fill_brewer(palette = "Pastel1")
 
+
+ggplot(data=AllPunk, aes(x=Nose)) + 
+  geom_bar(aes(color=Nose), show.legend = FALSE) + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Nose Attributes", y = "Count", x = "Nose Attributes") + scale_fill_brewer(palette = "Pastel1")
 ```
 
 
@@ -498,9 +513,77 @@ Create barplot for Ears Attribute
 ggplot(data=subset(AllPunk, !is.na(Ears)), aes(x=reorder(Ears, Ears, function(x)-length(x)))) + 
   geom_bar(aes(fill=Ears), show.legend = FALSE) + 
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust=.5)) + 
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Ears Attributes", y = "Count", x = "Ears Attributes") + scale_fill_brewer(palette = "PiYG")
+
+
+ggplot(data=AllPunk, aes(x=Ears)) + 
+  geom_bar(aes(color=Ears), show.legend = FALSE) + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
   labs(title = "Count of Ears Attributes", y = "Count", x = "Ears Attributes") + scale_fill_brewer(palette = "PiYG")
 
 ```
+
+
+Barplot of Type
+```{r}
+ggplot(data=subset(AllPunk, !is.na(type)), aes(x=reorder(type, type, function(x)-length(x)))) + 
+  geom_bar(aes(fill=type), show.legend = FALSE) + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Type", y = "Count", x = "Type") + scale_fill_brewer(palette = "PiYG")
+
+
+ggplot(data=AllPunk, aes(x=type)) + 
+  geom_bar(aes(fill=type), show.legend = FALSE) + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Type", y = "Count", x = "Type") + scale_fill_brewer(palette = "PiYG")
+```
+
+
+Barplot of gender
+```{r}
+ggplot(data=subset(AllPunk, !is.na(type)), aes(x=reorder(gender, gender, function(x)-length(x)))) + 
+  geom_bar(aes(fill=gender), show.legend = FALSE) + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Gender", y = "Count", x = "Gender") + scale_fill_brewer(palette = "Pastel1")
+
+
+ggplot(data=AllPunk, aes(x=gender)) + 
+  geom_bar(aes(fill=gender), show.legend = FALSE) + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5, hjust=.5),
+        plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Count of Gender", y = "Count", x = "Gender") + scale_fill_brewer(palette = "Pastel1")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
